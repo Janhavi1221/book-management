@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { FiBook, FiHome, FiPlusCircle, FiList, FiGrid } from 'react-icons/fi';
+import { FiBook, FiHome, FiPlusCircle, FiList, FiGrid, FiSearch, FiTag, FiHeart, FiFilter, FiUser, FiMessageSquare } from 'react-icons/fi';
 
 const Header = () => {
   return (
@@ -26,6 +26,26 @@ const Header = () => {
           <Link to="/gallery">
             <FiGrid />
             <span>Gallery</span>
+          </Link>
+          <Link to="/search">
+            <FiSearch />
+            <span>Search</span>
+          </Link>
+          <Link to="/categories">
+            <FiTag />
+            <span>Categories</span>
+          </Link>
+          <Link to="/authors">
+            <FiUser />
+            <span>Authors</span>
+          </Link>
+          <Link to="/favorites">
+            <FiHeart />
+            <span>Favorites</span>
+          </Link>
+          <Link to="/reviews">
+            <FiMessageSquare />
+            <span>Reviews</span>
           </Link>
         </nav>
       </div>
