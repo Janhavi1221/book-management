@@ -117,6 +117,39 @@ const Dashboard = () => {
 
         </div>
 
+        {/* Quick Actions */}
+        <div className="grid grid-cols-2">
+          <Link to="/add-book" className="card text-center group hover:transform hover:scale-105 transition-all duration-200">
+            <FiPlusCircle className="text-4xl text-blue-600 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-gray-800 mb-2">Add New Book</h3>
+            <p className="text-gray-600">Add a new book to your collection</p>
+          </Link>
+
+          <Link to="/view-books" className="card text-center group hover:transform hover:scale-105 transition-all duration-200">
+            <FiBookOpen className="text-4xl text-purple-600 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-gray-800 mb-2">View All Books</h3>
+            <p className="text-gray-600">Browse and manage your book collection</p>
+          </Link>
+        </div>
+
+        {/* Gallery Preview */}
+        <div className="card mb-8">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">
+              <FiGrid className="inline mr-3 text-blue-600" />
+              Book Gallery
+            </h2>
+            <p className="text-gray-600 mb-6">View your books in a beautiful gallery layout with advanced filtering</p>
+            <Link 
+              to="/gallery" 
+              className="btn-primary glow inline-flex items-center"
+            >
+              <FiGrid />
+              Open Gallery
+            </Link>
+          </div>
+        </div>
+
         {/* STATISTICS */}
 
         <div className="grid grid-cols-4 mb-8">

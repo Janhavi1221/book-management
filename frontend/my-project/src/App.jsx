@@ -5,6 +5,7 @@ import Dashboard from "./pages/Dashboard";
 import AddBook from "./pages/AddBook";
 import ViewBooks from "./pages/ViewBooks";
 import EditBook from "./pages/EditBook";
+import BookGallery from "./pages/BookGallery";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/add-book" element={<AddBook />} />
         <Route path="/view-books" element={<ViewBooks />} />
         <Route path="/edit-book/:id" element={<EditBook />} />
+        <Route path="/gallery" element={<BookGallery />} />
       </Routes>
     </BrowserRouter>
   );

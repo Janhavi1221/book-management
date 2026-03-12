@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { FiBook, FiHome, FiPlusCircle, FiList } from 'react-icons/fi';
+import { FiBook, FiHome, FiPlusCircle, FiList, FiGrid } from 'react-icons/fi';
 
 const Header = () => {
   return (
@@ -7,7 +7,7 @@ const Header = () => {
       <div className="header-container">
         <Link to="/" className="logo">
           <FiBook className="text-3xl" />
-          <span>Book Manager</span>
+          <span>BookShelf</span>
         </Link>
         
         <nav className="nav-links">
@@ -22,6 +22,10 @@ const Header = () => {
           <Link to="/view-books">
             <FiList />
             <span>View Books</span>
+          </Link>
+          <Link to="/gallery">
+            <FiGrid />
+            <span>Gallery</span>
           </Link>
         </nav>
       </div>
