@@ -56,7 +56,7 @@ const SearchPage = () => {
           setAuthors(uniqueAuthors);
         }
       } catch (error) {
-        console.error('Error fetching books:', error);
+        setLoading(false);
       } finally {
         setLoading(false);
       }

@@ -16,11 +16,12 @@ const BookGallery = () => {
       try {
         const data = await bookAPI.getAllBooks();
         if (data.Success) {
-          setBooks(data.BookList || []);
-          setFilteredBooks(data.BookList || []);
+          const booksList = data.BookList || [];
+          setBooks(booksList);
+          setFilteredBooks(booksList);
         }
       } catch (error) {
-        console.error('Error fetching books:', error);
+        setLoading(false);
       } finally {
         setLoading(false);
       }

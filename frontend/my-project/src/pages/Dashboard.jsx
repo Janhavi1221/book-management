@@ -20,15 +20,11 @@ const Dashboard = () => {
 
       try {
 
-        console.log('Fetching books from API...');
         const response = await bookAPI.getAllBooks();
-        console.log('API Response:', response);
 
         if (response.Success) {
 
           const books = response.BookList || [];
-          console.log('Books found:', books.length);
-          console.log('Books data:', books);
 
           const totalBooks = books.length;
 
@@ -61,12 +57,11 @@ const Dashboard = () => {
           setRecentBooks(recentBooks);
 
         } else {
-          console.log('API Response failed:', response);
+          // API response failed
         }
 
       } catch (error) {
         console.error('Dashboard fetch error:', error);
-        console.log('Backend might not be running or CORS issue');
       } finally {
         setLoading(false);
       }

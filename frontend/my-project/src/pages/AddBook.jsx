@@ -25,14 +25,11 @@ const AddBook = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submitted with data:', formData);
     setLoading(true);
     setError('');
 
     try {
-      console.log('Calling bookAPI.addBook...');
       const response = await bookAPI.addBook(formData);
-      console.log('API response received:', response);
       
       if (response.Success) {
         alert('Book added successfully!');
@@ -45,11 +42,9 @@ const AddBook = () => {
         });
         navigate('/view-books');
       } else {
-        console.log('API returned failure:', response);
         setError(response.Message || 'Failed to add book');
       }
     } catch (err) {
-      console.error('Error in handleSubmit:', err);
       setError('Failed to connect to server');
     } finally {
       setLoading(false);

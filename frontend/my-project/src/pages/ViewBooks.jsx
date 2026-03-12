@@ -12,21 +12,15 @@ const ViewBooks = () => {
   // Fetch books from API
   useEffect(() => {
     const fetchBooks = async () => {
-      console.log('Fetching books...');
       try {
         const data = await bookAPI.getAllBooks();
-        console.log('API response:', data);
         
         if (data.Success) {
-          console.log('Books fetched successfully:', data.BookList);
           setBooks(data.BookList || []);
-          console.log('Books state set:', data.BookList || []);
         } else {
-          console.log('API returned failure:', data);
           setError(data.Message || 'Failed to fetch books');
         }
       } catch (err) {
-        console.error('Error fetching books:', err);
         setError('Failed to connect to server');
       } finally {
         setLoading(false);
