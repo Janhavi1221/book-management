@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { FiBookOpen, FiPlusCircle, FiTrendingUp, FiCalendar } from 'react-icons/fi';
+import { FiBookOpen, FiPlusCircle, FiTrendingUp, FiCalendar, FiGrid } from 'react-icons/fi';
 import { useState, useEffect } from 'react';
 import { bookAPI } from '../services/api';
 
