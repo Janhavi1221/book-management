@@ -85,12 +85,12 @@ const AdvancedDashboard = () => {
       <div className="creative-container">
         {/* Welcome Section */}
         <div className="creative-header animate-fadeInUp">
-          <div className="inline-flex items-center mb-6">
-            <div className="glass-card p-6 inline-flex">
+          <div className="inline-flex items-center">
+            <div className="inline-flex">
               <img 
                 src={library1} 
                 alt="Book" 
-                style={{ width: "100%", height: "120px", objectFit: "cover" }} 
+                style={{ width: "100%", height: "300px", objectFit: "cover" }} 
               />
             </div>
           </div>
