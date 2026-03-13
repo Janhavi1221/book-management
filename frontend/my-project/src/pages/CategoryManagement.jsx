@@ -1,41 +1,83 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FiPlus, FiEdit, FiTrash2, FiBook, FiGrid, FiList, FiTag, FiSave, FiX } from 'react-icons/fi';
+import { FiPlus, FiEdit, FiTrash2, FiBook, FiGrid, FiList, FiTag, FiSave, FiX, FiFilter, FiSearch } from 'react-icons/fi';
 
 const CategoryManagement = () => {
   const [categories, setCategories] = useState([
-    { id: 1, name: 'Fiction', description: 'Novels, stories, and fictional narratives', icon: '📖', color: 'purple' },
-    { id: 2, name: 'Programming', description: 'Computer science, coding, and technical books', icon: '💻', color: 'blue' },
-    { id: 3, name: 'Science', description: 'Scientific research and educational content', icon: '🔬', color: 'green' },
-    { id: 4, name: 'History', description: 'Historical events and biographical works', icon: '📜', color: 'yellow' },
-    { id: 5, name: 'Biography', description: 'Life stories and personal accounts', icon: '👤', color: 'pink' },
-    { id: 6, name: 'Self-Help', description: 'Personal development and motivational content', icon: '🎯', color: 'indigo' },
-    { id: 7, name: 'Business', description: 'Business, finance, and entrepreneurship', icon: '💼', color: 'red' },
-    { id: 8, name: 'Art & Design', description: 'Creative arts and design principles', icon: '🎨', color: 'orange' }
+    { id: 1, name: 'Fiction', description: 'Novels, stories, and fictional narratives', icon: '📖', color: 'purple', bookCount: 24 },
+    { id: 2, name: 'Programming', description: 'Computer science, coding, and technical books', icon: '💻', color: 'blue', bookCount: 18 },
+    { id: 3, name: 'Science', description: 'Scientific research and educational content', icon: '🔬', color: 'green', bookCount: 32 },
+    { id: 4, name: 'History', description: 'Historical events and biographical works', icon: '📜', color: 'yellow', bookCount: 15 },
+    { id: 5, name: 'Biography', description: 'Life stories and personal accounts', icon: '👤', color: 'pink', bookCount: 21 },
+    { id: 6, name: 'Self-Help', description: 'Personal development and motivational content', icon: '🎯', color: 'indigo', bookCount: 28 },
+    { id: 7, name: 'Business', description: 'Business, finance, and entrepreneurship', icon: '💼', color: 'red', bookCount: 19 },
+    { id: 8, name: 'Art & Design', description: 'Creative arts and design principles', icon: '🎨', color: 'orange', bookCount: 12 }
   ]);
   const [loading, setLoading] = useState(false);
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingCategory, setEditingCategory] = useState(null);
   const [formData, setFormData] = useState({ name: '', description: '', icon: '📚', color: 'blue' });
+  const [searchTerm, setSearchTerm] = useState('');
+  const [viewMode, setViewMode] = useState('grid');
+  const [selectedColor, setSelectedColor] = useState('all');
 
   const colorClasses = {
-    purple: 'bg-purple-100 text-purple-800 border-purple-300',
-    blue: 'bg-blue-100 text-blue-800 border-blue-300',
-    green: 'bg-green-100 text-green-800 border-green-300',
-    yellow: 'bg-yellow-100 text-yellow-800 border-yellow-300',
-    pink: 'bg-pink-100 text-pink-800 border-pink-300',
-    indigo: 'bg-indigo-100 text-indigo-800 border-indigo-300',
-    red: 'bg-red-100 text-red-800 border-red-300',
-    orange: 'bg-orange-100 text-orange-800 border-orange-300'
+    purple: 'from-purple-400 to-purple-600',
+    blue: 'from-blue-400 to-blue-600',
+    green: 'from-green-400 to-green-600',
+    yellow: 'from-yellow-400 to-yellow-600',
+    pink: 'from-pink-400 to-pink-600',
+    indigo: 'from-indigo-400 to-indigo-600',
+    red: 'from-red-400 to-red-600',
+    orange: 'from-orange-400 to-orange-600'
   };
 
-  const handleAddCategory = () => {
+  const colors = [
+    { id: 'purple', name: 'Purple', class: 'from-purple-400 to-purple-600' },
+    { id: 'blue', name: 'Blue', class: 'from-blue-400 to-blue-600' },
+    { id: 'green', name: 'Green', class: 'from-green-400 to-green-600' },
+    { id: 'yellow', name: 'Yellow', class: 'from-yellow-400 to-yellow-600' },
+    { id: 'pink', name: 'Pink', class: 'from-pink-400 to-pink-600' },
+    { id: 'indigo', name: 'Indigo', class: 'from-indigo-400 to-indigo-600' },
+    { id: 'red', name: 'Red', class: 'from-red-400 to-red-600' },
+    { id: 'orange', name: 'Orange', class: 'from-orange-400 to-orange-600' }
+  ];
+
+  const icons = ['📚', '📖', '📕', '📗', '📘', '📙', '📔', '📓', '📰', '📜', '🔬', '💻', '🎨', '🎯', '💼', '👤', '🌟', '🚀', '🔥', '💎'];
+
+  const filteredCategories = categories.filter(category => {
+    const matchesSearch = category.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         category.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesColor = selectedColor === 'all' || category.color === selectedColor;
+    return matchesSearch && matchesColor;
+  });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    if (editingCategory) {
+      setCategories(categories.map(cat => 
+        cat.id === editingCategory.id 
+          ? { ...cat, ...formData }
+          : cat
+      ));
+    } else {
+      const newCategory = {
+        id: Date.now(),
+        ...formData,
+        bookCount: 0
+      };
+      setCategories([...categories, newCategory]);
+    }
+
+    setLoading(false);
+    setShowAddForm(false);
     setEditingCategory(null);
     setFormData({ name: '', description: '', icon: '📚', color: 'blue' });
-    setShowAddForm(true);
   };
 
-  const handleEditCategory = (category) => {
+  const handleEdit = (category) => {
     setEditingCategory(category);
     setFormData({
       name: category.name,
@@ -46,280 +88,317 @@ const CategoryManagement = () => {
     setShowAddForm(true);
   };
 
-  const handleDeleteCategory = (categoryId) => {
-    if (window.confirm('Are you sure you want to delete this category? Books in this category will be moved to "General".')) {
-      setCategories(categories.filter(cat => cat.id !== categoryId));
-      // In real app, this would call API to delete category
-      alert('Category deleted successfully!');
+  const handleDelete = (id) => {
+    if (window.confirm('Are you sure you want to delete this category?')) {
+      setCategories(categories.filter(cat => cat.id !== id));
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setLoading(true);
+  const totalBooks = categories.reduce((sum, cat) => sum + cat.bookCount, 0);
 
-    if (editingCategory) {
-      // Update existing category
-      setCategories(categories.map(cat => 
-        cat.id === editingCategory.id 
-          ? { ...formData, id: editingCategory.id }
-          : cat
-      ));
-      alert('Category updated successfully!');
-    } else {
-      // Add new category
-      const newCategory = {
-        id: Math.max(...categories.map(cat => cat.id), 0) + 1,
-        ...formData
-      };
-      setCategories([...categories, newCategory]);
-      alert('Category added successfully!');
-    }
-
-    // Reset form
-    setFormData({ name: '', description: '', icon: '📚', color: 'blue' });
-    setShowAddForm(false);
-    setEditingCategory(null);
-    setLoading(false);
-  };
-
-  const handleCancel = () => {
-    setShowAddForm(false);
-    setEditingCategory(null);
-    setFormData({ name: '', description: '', icon: '📚', color: 'blue' });
-  };
-
-  const getCategoryStats = () => {
-    return {
-      total: categories.length,
-      fiction: categories.filter(cat => cat.name === 'Fiction').length,
-      programming: categories.filter(cat => cat.name === 'Programming').length,
-      science: categories.filter(cat => cat.name === 'Science').length,
-      history: categories.filter(cat => cat.name === 'History').length,
-      other: categories.filter(cat => !['Fiction', 'Programming', 'Science', 'History'].includes(cat.name)).length
-    };
-  };
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="loading-creative">
+          <div className="loading-spinner-creative"></div>
+          <div className="loading-dots-creative">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <p className="text-gray-800 text-lg mt-4">Loading categories...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div style={{ backgroundColor: '#f0ead6', minHeight: '100vh' }}>
-      <div className="container">
+    <div className="min-h-screen">
+      <div className="creative-container">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-800 mb-4">
-            <FiTag className="inline mr-3 text-blue-600" />
-            Category Management
-          </h1>
-          <p className="text-gray-600 text-lg">Manage book categories for better organization</p>
+        <div className="creative-header mb-8">
+          <h1>Category Management</h1>
+          <p>Organize your books with custom categories</p>
         </div>
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-lg shadow-md p-6 text-center">
-            <FiGrid className="text-4xl text-blue-600 mx-auto mb-3" />
-            <h3 className="text-2xl font-bold text-gray-800">{getCategoryStats().total}</h3>
+        {/* Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="glass-card text-center">
+            <div className="text-3xl font-bold text-blue-600 mb-2">{categories.length}</div>
             <p className="text-gray-600">Total Categories</p>
           </div>
-          <div className="bg-white rounded-lg shadow-md p-6 text-center">
-            <FiBook className="text-4xl text-purple-600 mx-auto mb-3" />
-            <h3 className="text-2xl font-bold text-gray-800">{getCategoryStats().fiction}</h3>
-            <p className="text-gray-600">Fiction</p>
+          <div className="glass-card text-center">
+            <div className="text-3xl font-bold text-green-600 mb-2">{totalBooks}</div>
+            <p className="text-gray-600">Total Books</p>
           </div>
-          <div className="bg-white rounded-lg shadow-md p-6 text-center">
-            <FiBook className="text-4xl text-green-600 mx-auto mb-3" />
-            <h3 className="text-2xl font-bold text-gray-800">{getCategoryStats().programming}</h3>
-            <p className="text-gray-600">Programming</p>
+          <div className="glass-card text-center">
+            <div className="text-3xl font-bold text-purple-600 mb-2">
+              {Math.round(totalBooks / categories.length)}
+            </div>
+            <p className="text-gray-600">Avg Books per Category</p>
           </div>
-          <div className="bg-white rounded-lg shadow-md p-6 text-center">
-            <FiBook className="text-4xl text-yellow-600 mx-auto mb-3" />
-            <h3 className="text-2xl font-bold text-gray-800">{getCategoryStats().science}</h3>
-            <p className="text-gray-600">Science</p>
+        </div>
+
+        {/* Search and Filters */}
+        <div className="glass-card mb-8">
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="search-creative flex-1">
+              <FiSearch size={20} className="text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search categories..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="search-input-creative"
+              />
+            </div>
+            <div className="form-group-creative mb-0">
+              <select
+                value={selectedColor}
+                onChange={(e) => setSelectedColor(e.target.value)}
+                className="form-input-creative"
+              >
+                <option value="all">All Colors</option>
+                {colors.map(color => (
+                  <option key={color.id} value={color.id}>{color.name}</option>
+                ))}
+              </select>
+            </div>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setViewMode('grid')}
+                className={`btn-creative ${viewMode === 'grid' ? 'btn-primary-creative' : 'btn-secondary-creative'}`}
+              >
+                <FiGrid size={20} />
+                Grid
+              </button>
+              <button
+                onClick={() => setViewMode('list')}
+                className={`btn-creative ${viewMode === 'list' ? 'btn-primary-creative' : 'btn-secondary-creative'}`}
+              >
+                <FiList size={20} />
+                List
+              </button>
+            </div>
           </div>
         </div>
 
         {/* Add Category Button */}
-        <div className="text-center mb-8">
+        <div className="mb-8">
           <button
-            onClick={handleAddCategory}
-            className="bg-blue-600 text-white px-8 py-4 rounded-lg hover:bg-blue-700 transition-colors inline-flex items-center text-lg font-semibold"
+            onClick={() => setShowAddForm(true)}
+            className="btn-creative btn-primary-creative"
           >
-            <FiPlus className="mr-3" />
+            <FiPlus size={20} />
             Add New Category
           </button>
         </div>
 
-        {/* Category Form */}
-        {showAddForm && (
-          <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-gray-800">
-                {editingCategory ? 'Edit Category' : 'Add New Category'}
-              </h2>
+        {/* Categories Display */}
+        {filteredCategories.length > 0 ? (
+          viewMode === 'grid' ? (
+            <div className="creative-grid">
+              {filteredCategories.map((category) => (
+                <div key={category.id} className="book-card-creative">
+                  <div className={`book-cover-creative bg-gradient-to-br ${colorClasses[category.color]}`}>
+                    <span className="text-4xl">{category.icon}</span>
+                    <div className="absolute top-2 right-2 bg-white bg-opacity-90 rounded-full px-2 py-1">
+                      <span className="text-xs font-semibold">{category.bookCount} books</span>
+                    </div>
+                  </div>
+                  <div className="book-info-creative">
+                    <h3 className="book-title-creative">{category.name}</h3>
+                    <p className="book-author-creative text-sm">{category.description}</p>
+                    <div className="flex gap-2 mt-4">
+                      <button
+                        onClick={() => handleEdit(category)}
+                        className="btn-creative btn-secondary-creative flex-1"
+                      >
+                        <FiEdit size={16} />
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDelete(category.id)}
+                        className="btn-creative btn-secondary-creative"
+                      >
+                        <FiTrash2 size={16} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {filteredCategories.map((category) => (
+                <div key={category.id} className="glass-card">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className={`w-16 h-16 rounded-lg bg-gradient-to-br ${colorClasses[category.color]} flex items-center justify-center`}>
+                        <span className="text-2xl">{category.icon}</span>
+                      </div>
+                      <div>
+                        <h3 className="book-title-creative">{category.name}</h3>
+                        <p className="book-author-creative text-sm">{category.description}</p>
+                        <div className="text-sm text-gray-500 mt-1">{category.bookCount} books</div>
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => handleEdit(category)}
+                        className="btn-creative btn-secondary-creative"
+                      >
+                        <FiEdit size={16} />
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDelete(category.id)}
+                        className="btn-creative btn-secondary-creative"
+                      >
+                        <FiTrash2 size={16} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )
+        ) : (
+          <div className="text-center py-12">
+            <div className="inline-flex flex-col items-center">
+              <FiTag size={48} className="text-gray-400 mb-6" />
+              <h3 className="text-xl font-semibold text-gray-700 mb-2">No categories found</h3>
+              <p className="text-gray-500 mb-6">Try adjusting your search or add a new category</p>
               <button
-                onClick={handleCancel}
-                className="text-gray-500 hover:text-gray-700 transition-colors"
+                onClick={() => setShowAddForm(true)}
+                className="btn-creative btn-primary-creative"
               >
-                <FiX />
+                <FiPlus size={20} />
+                Add First Category
               </button>
             </div>
-
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Category Name */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Category Name
-                </label>
-                <input
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) => setFormData({...formData, name: e.target.value})}
-                  required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter category name"
-                />
-              </div>
-
-              {/* Description */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Description
-                </label>
-                <textarea
-                  value={formData.description}
-                  onChange={(e) => setFormData({...formData, description: e.target.value})}
-                  rows={3}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter category description"
-                />
-              </div>
-
-              {/* Icon Selection */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Icon
-                </label>
-                <div className="grid grid-cols-8 gap-2">
-                  {['📚', '📖', '💻', '🔬', '📜', '👤', '🎯', '💼', '🎨'].map(icon => (
-                    <button
-                      key={icon}
-                      type="button"
-                      onClick={() => setFormData({...formData, icon})}
-                      className={`p-3 rounded-lg border-2 transition-all ${
-                        formData.icon === icon
-                          ? 'border-blue-500 bg-blue-50'
-                          : 'border-gray-300 hover:border-gray-400'
-                      }`}
-                    >
-                      <span className="text-2xl">{icon}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Color Selection */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Color Theme
-                </label>
-                <div className="grid grid-cols-4 gap-2">
-                  {Object.keys(colorClasses).map(color => (
-                    <button
-                      key={color}
-                      type="button"
-                      onClick={() => setFormData({...formData, color})}
-                      className={`p-3 rounded-lg border-2 transition-all capitalize ${
-                        formData.color === color
-                          ? `${colorClasses[color]} border-current`
-                          : 'border-gray-300 hover:border-gray-400'
-                      }`}
-                    >
-                      <div className={`w-6 h-6 rounded ${formData.color === color ? colorClasses[color] : 'bg-gray-100'}`}></div>
-                      <span className="text-sm font-medium">{color}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Submit Buttons */}
-              <div className="flex space-x-4">
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {loading ? (
-                    <>
-                      <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent mr-2"></div>
-                      {editingCategory ? 'Updating...' : 'Adding...'}
-                    </>
-                  ) : (
-                    <>
-                      <FiSave className="inline mr-2" />
-                      {editingCategory ? 'Update Category' : 'Add Category'}
-                    </>
-                  )}
-                </button>
-                <button
-                  type="button"
-                  onClick={handleCancel}
-                  className="bg-gray-200 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-300 transition-colors"
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
           </div>
         )}
 
-        {/* Categories Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {categories.map((category) => (
-            <div key={category.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 group">
-              {/* Category Header */}
-              <div className={`p-6 ${colorClasses[category.color]}`}>
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center">
-                    <span className="text-4xl mr-3">{category.icon}</span>
-                    <h3 className="text-xl font-bold text-gray-800">{category.name}</h3>
-                  </div>
-                  <div className="flex space-x-2">
-                    <button
-                      onClick={() => handleEditCategory(category)}
-                      className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition-colors"
-                    >
-                      <FiEdit />
-                    </button>
-                    <button
-                      onClick={() => handleDeleteCategory(category.id)}
-                      className="bg-red-600 text-white p-2 rounded hover:bg-red-700 transition-colors"
-                    >
-                      <FiTrash2 />
-                    </button>
-                  </div>
-                </div>
-                <p className="text-gray-600 text-sm">{category.description}</p>
+        {/* Add/Edit Category Modal */}
+        {showAddForm && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="glass-card max-w-md w-full m-4">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold text-gray-800">
+                  {editingCategory ? 'Edit Category' : 'Add New Category'}
+                </h2>
+                <button
+                  onClick={() => {
+                    setShowAddForm(false);
+                    setEditingCategory(null);
+                    setFormData({ name: '', description: '', icon: '📚', color: 'blue' });
+                  }}
+                  className="btn-creative btn-secondary-creative"
+                >
+                  <FiX size={20} />
+                </button>
               </div>
 
-              {/* Preview */}
-              <div className="bg-gray-50 p-4">
-                <p className="text-sm text-gray-500">
-                  <strong>Example books:</strong> The Great Gatsby, To Kill a Mockingbird, 1984
-                </p>
-                <div className="flex flex-wrap gap-2 mt-2">
-                  <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs">Fiction</span>
-                  <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Classic</span>
-                  <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs">Literature</span>
+              <form onSubmit={handleSubmit}>
+                <div className="form-group-creative">
+                  <label>Category Name</label>
+                  <input
+                    type="text"
+                    value={formData.name}
+                    onChange={(e) => setFormData({...formData, name: e.target.value})}
+                    required
+                    className="form-input-creative"
+                    placeholder="Enter category name"
+                  />
                 </div>
-              </div>
+
+                <div className="form-group-creative">
+                  <label>Description</label>
+                  <textarea
+                    value={formData.description}
+                    onChange={(e) => setFormData({...formData, description: e.target.value})}
+                    required
+                    className="form-input-creative"
+                    placeholder="Enter category description"
+                    rows="3"
+                  />
+                </div>
+
+                <div className="form-group-creative">
+                  <label>Icon</label>
+                  <div className="grid grid-cols-10 gap-2">
+                    {icons.map((icon, index) => (
+                      <button
+                        key={index}
+                        type="button"
+                        onClick={() => setFormData({...formData, icon})}
+                        className={`p-2 rounded-lg border-2 transition-all ${
+                          formData.icon === icon 
+                            ? 'border-blue-500 bg-blue-50' 
+                            : 'border-gray-200 hover:border-gray-300'
+                        }`}
+                      >
+                        {icon}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="form-group-creative">
+                  <label>Color</label>
+                  <div className="grid grid-cols-4 gap-2">
+                    {colors.map((color) => (
+                      <button
+                        key={color.id}
+                        type="button"
+                        onClick={() => setFormData({...formData, color: color.id})}
+                        className={`p-3 rounded-lg bg-gradient-to-br ${color.class} text-white font-semibold transition-all ${
+                          formData.color === color.id 
+                            ? 'ring-2 ring-offset-2 ring-blue-500' 
+                            : 'hover:scale-105'
+                        }`}
+                      >
+                        {color.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex gap-4 mt-6">
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="btn-creative btn-primary-creative flex-1"
+                  >
+                    {loading ? (
+                      <>
+                        <div className="loading-spinner-creative w-5 h-5 mr-2"></div>
+                        Saving...
+                      </>
+                    ) : (
+                      <>
+                        <FiSave size={20} />
+                        {editingCategory ? 'Update' : 'Add'} Category
+                      </>
+                    )}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowAddForm(false);
+                      setEditingCategory(null);
+                      setFormData({ name: '', description: '', icon: '📚', color: 'blue' });
+                    }}
+                    className="btn-creative btn-secondary-creative"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
             </div>
-          ))}
-        </div>
-
-        {/* Navigation */}
-        <div className="text-center mt-8">
-          <Link to="/gallery" className="bg-gray-200 text-gray-700 px-8 py-3 rounded-lg hover:bg-gray-300 transition-colors">
-            Back to Gallery
-          </Link>
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );

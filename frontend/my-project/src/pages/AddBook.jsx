@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FiBook, FiUser, FiCalendar, FiDollarSign, FiArrowLeft } from 'react-icons/fi';
+import { FiBook, FiUser, FiCalendar, FiDollarSign, FiArrowLeft, FiImage } from 'react-icons/fi';
 import { Link, useNavigate } from 'react-router-dom';
 import { bookAPI } from '../services/api';
 
@@ -10,7 +10,8 @@ const AddBook = () => {
     author: '',
     publishDate: '',
     price: '',
-    description: ''
+    description: '',
+    image: ''
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -38,7 +39,8 @@ const AddBook = () => {
           author: '',
           publishDate: '',
           price: '',
-          description: ''
+          description: '',
+          image: ''
         });
         navigate('/view-books');
       } else {
@@ -52,8 +54,8 @@ const AddBook = () => {
   };
 
   return (
-    <div style={{ backgroundColor: '#f0ead6', minHeight: '100vh' }}>
-      <div className="container">
+    <div className="min-h-screen">
+      <div className="creative-container">
         {/* Back Button */}
         <Link 
           to="/" 
@@ -65,150 +67,146 @@ const AddBook = () => {
 
         {/* Form Card */}
         <div className="max-w-lg mx-auto">
-          <div className="card hover-lift">
+          <div className="form-creative">
             {/* Header */}
-            <div className="text-center mb-8">
+            <div className="creative-header mb-8">
               <div className="flex justify-center mb-6">
-                <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-6 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110">
-                  <FiBook className="text-4xl text-white" />
+                <div className="glass-card p-6 inline-flex">
+                  <FiBook className="text-4xl text-blue-600" />
                 </div>
               </div>
-              <h1 className="text-3xl font-bold text-gray-800 mb-3">Add New Book</h1>
-              <p className="text-gray-600 text-lg">Fill in details to add a new book to your collection</p>
+              <h1>Add New Book</h1>
+              <p>Fill in details to add a new book to your collection</p>
             </div>
 
             {/* Error Message */}
             {error && (
-              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-6">
-                <p className="font-semibold">{error}</p>
+              <div className="glass-card mb-6 border border-red-300">
+                <p className="text-red-600 font-semibold">{error}</p>
               </div>
             )}
 
             {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-7">
+            <form onSubmit={handleSubmit}>
               {/* Book Title */}
-              <div className="form-group">
-                <label className="form-label">
-                  Book Title
-                </label>
-                <div className="input-icon" data-icon="📚">
-                  <input
-                    type="text"
-                    name="title"
-                    value={formData.title}
-                    onChange={handleChange}
-                    required
-                    disabled={loading}
-                    className="form-input"
-                    placeholder="Enter book title"
-                  />
-                </div>
+              <div className="form-group-creative">
+                <label>Book Title</label>
+                <input
+                  type="text"
+                  name="title"
+                  value={formData.title}
+                  onChange={handleChange}
+                  required
+                  disabled={loading}
+                  className="form-input-creative"
+                  placeholder="Enter book title"
+                />
               </div>
 
               {/* Author Name */}
-              <div className="form-group">
-                <label className="form-label">
-                  Author Name
-                </label>
-                <div className="input-icon" data-icon="✍️">
-                  <input
-                    type="text"
-                    name="author"
-                    value={formData.author}
-                    onChange={handleChange}
-                    required
-                    disabled={loading}
-                    className="form-input"
-                    placeholder="Enter author name"
-                  />
-                </div>
+              <div className="form-group-creative">
+                <label>Author Name</label>
+                <input
+                  type="text"
+                  name="author"
+                  value={formData.author}
+                  onChange={handleChange}
+                  required
+                  disabled={loading}
+                  className="form-input-creative"
+                  placeholder="Enter author name"
+                />
               </div>
 
               {/* Publish Date */}
-              <div className="form-group">
-                <label className="form-label">
-                  Publish Date
-                </label>
-                <div className="input-icon" data-icon="📅">
-                  <input
-                    type="date"
-                    name="publishDate"
-                    value={formData.publishDate}
-                    onChange={handleChange}
-                    required
-                    disabled={loading}
-                    className="form-input"
-                  />
-                </div>
+              <div className="form-group-creative">
+                <label>Publish Date</label>
+                <input
+                  type="date"
+                  name="publishDate"
+                  value={formData.publishDate}
+                  onChange={handleChange}
+                  required
+                  disabled={loading}
+                  className="form-input-creative"
+                />
               </div>
 
               {/* Price */}
-              <div className="form-group">
-                <label className="form-label">
-                  Price (₹)
-                </label>
-                <div className="input-icon" data-icon="💰">
-                  <input
-                    type="number"
-                    name="price"
-                    value={formData.price}
-                    onChange={handleChange}
-                    required
-                    step="0.01"
-                    min="0"
-                    disabled={loading}
-                    className="form-input"
-                    placeholder="0.00"
-                  />
-                </div>
+              <div className="form-group-creative">
+                <label>Price (₹)</label>
+                <input
+                  type="number"
+                  name="price"
+                  value={formData.price}
+                  onChange={handleChange}
+                  required
+                  disabled={loading}
+                  className="form-input-creative"
+                  placeholder="Enter book price"
+                  min="0"
+                  step="0.01"
+                />
               </div>
 
-              {/* Description (Optional) */}
-              <div className="form-group">
-                <label className="form-label">
-                  Description (Optional)
-                </label>
-                <div className="input-icon" data-icon="📝">
-                  <textarea
-                    name="description"
-                    value={formData.description}
-                    onChange={handleChange}
-                    disabled={loading}
-                    className="form-input min-h-[100px] resize-none"
-                    placeholder="Enter book description (optional)"
-                  />
-                </div>
+              {/* Image URL */}
+              <div className="form-group-creative">
+                <label>Book Cover Image URL (Optional)</label>
+                <input
+                  type="url"
+                  name="image"
+                  value={formData.image}
+                  onChange={handleChange}
+                  disabled={loading}
+                  className="form-input-creative"
+                  placeholder="https://example.com/book-cover.jpg"
+                />
+                <p className="text-sm text-gray-500 mt-2">
+                  Enter a URL for the book cover image. Leave empty to use default icon.
+                </p>
+              </div>
+
+              {/* Description */}
+              <div className="form-group-creative">
+                <label>Description</label>
+                <textarea
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
+                  disabled={loading}
+                  className="form-input-creative"
+                  placeholder="Enter book description"
+                  rows="4"
+                />
               </div>
 
               {/* Submit Button */}
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full btn-primary glow disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {loading ? (
-                  <>
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                    Adding Book...
-                  </>
-                ) : (
-                  <>
-                    <FiBook />
-                    Add Book
-                  </>
-                )}
-              </button>
-            </form>
-
-            {/* Additional Options */}
-            <div className="mt-8 text-center">
-              <p className="text-gray-600">
-                Want to add multiple books?{' '}
-                <Link to="/add-book" className="text-blue-600 hover:text-blue-700 font-semibold transition-colors duration-200">
-                  Add another book
+              <div className="flex gap-4">
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="btn-creative btn-primary-creative flex-1"
+                >
+                  {loading ? (
+                    <>
+                      <div className="loading-spinner-creative w-5 h-5 mr-2"></div>
+                      Adding Book...
+                    </>
+                  ) : (
+                    <>
+                      <FiBook className="mr-2" />
+                      Add Book
+                    </>
+                  )}
+                </button>
+                <Link
+                  to="/"
+                  className="btn-creative btn-secondary-creative"
+                >
+                  Cancel
                 </Link>
-              </p>
-            </div>
+              </div>
+            </form>
           </div>
         </div>
       </div>
