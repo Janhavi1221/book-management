@@ -88,10 +88,10 @@ const AdvancedDashboard = () => {
           <div className="inline-flex items-center mb-6">
             <div className="glass-card p-6 inline-flex">
               <img 
-  src={library1} 
-  alt="Book" 
-  style={{ width: "40px", height: "40px", objectFit: "contain" }} 
- />
+                src={library1} 
+                alt="Book" 
+                style={{ width: "60px", height: "60px", objectFit: "contain" }} 
+              />
             </div>
           </div>
           <h1>BookShelf</h1>
