@@ -106,7 +106,7 @@ const AdvancedDashboard = () => {
         </div>
 
         {/* Statistics Cards */}
-        <div className="mb-16">
+        <div className="mb-20">
           <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', flexWrap: 'nowrap' }}>
             {/* Total Books */}
             <div style={{ width: '200px', textAlign: 'center', border: '2px solid #60a5fa', padding: '16px', borderRadius: '8px', backgroundColor: '#eff6ff', margin: '0 8px' }}>
@@ -132,7 +132,7 @@ const AdvancedDashboard = () => {
         </div>
 
         {/* Quick Actions */}
-        <div className="creative-grid mb-12">
+        <div className="creative-grid mb-12 mt-8">
           <Link 
             to="/add-book" 
             className="creative-card animate-fadeInUp"
