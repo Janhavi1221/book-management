@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import AdvancedIcons from './AdvancedIcons';
 import { bookAPI } from '../services/api';
 import '../styles/advanced.css';
+import library1 from "../assets/library1.jpg";
 
 const AdvancedDashboard = () => {
   const [stats, setStats] = useState({
@@ -86,7 +87,11 @@ const AdvancedDashboard = () => {
         <div className="creative-header animate-fadeInUp">
           <div className="inline-flex items-center mb-6">
             <div className="glass-card p-6 inline-flex">
-              <AdvancedIcons.BookOpen size={32} className="text-blue-600" />
+              <img 
+  src={library1} 
+  alt="Book" 
+  style={{ width: "40px", height: "40px", objectFit: "contain" }} 
+ />
             </div>
           </div>
           <h1>BookShelf</h1>
