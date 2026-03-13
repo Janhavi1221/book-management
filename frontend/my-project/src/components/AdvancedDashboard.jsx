@@ -90,7 +90,7 @@ const AdvancedDashboard = () => {
               <img 
                 src={library1} 
                 alt="Book" 
-                style={{ width: "60px", height: "60px", objectFit: "contain" }} 
+                style={{ width: "100%", height: "120px", objectFit: "cover" }} 
               />
             </div>
           </div>
